@@ -9,5 +9,5 @@ import reactor.core.publisher.Mono;
 public interface CreditDebtService {
 
 	public Flux<CreditDebt> saveCreditDebt(CreditdebtDto creditDebt);
-
+	public Mono<CreditDebt> updateCreditDebt(CreditdebtDto creditdebtDto);
 }

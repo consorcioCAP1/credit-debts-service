@@ -20,5 +20,6 @@ public class CreditDebt {
 	private String outStandingBankFee;
 	private String bankAccountNumber;
 	private String paymentDate;
+	private String cancelDate;
 	
 }
