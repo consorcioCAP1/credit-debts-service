@@ -5,6 +5,7 @@ import com.nttdata.bootcamp.creditdebtsservice.dto.CreditdebtDto;
 
 public class CreditDebtBuilder {
 
+	private CreditDebtBuilder(){}
 	public static CreditDebt mapToCreditDtoToCreditDebt(CreditdebtDto creditDebt) {
         return CreditDebt.builder()
                 .id(creditDebt.getId())

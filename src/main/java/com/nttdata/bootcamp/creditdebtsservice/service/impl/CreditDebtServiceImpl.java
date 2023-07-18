@@ -30,21 +30,22 @@ public class CreditDebtServiceImpl implements CreditDebtService{
 	@Autowired
 	CreditDebtRepository repository;
 	
-	public final String PENDING_PAYMENT_YES = "YES";
-	public final String PENDING_PAYMENT_NO = "NO";
-	public final String TRANSACTION_TYPE_BANK_CREDIT_PAYMENT = "CREDIT_PAYMENT";
+	public static final String PENDING_PAYMENT_YES = "YES";
+	public static final String PENDING_PAYMENT_NO = "NO";
+	public static final String TRANSACTION_TYPE_BANK_CREDIT_PAYMENT = "CREDIT_PAYMENT";
 
 	@Value("${bank-trasaction.api.url}")
     private String bankTransactionkUrl;
 	
 	@Value("${bank-trasaction.url.create}")
     private String bankTransactionkUrlCreate;
+
 	@Override
 	public Flux<CreditDebt> saveCreditDebt(CreditdebtDto creditDebt){
 		//creando variable para trabajar con la fecha inicio de pago
 	    LocalDate paymentStartDate = LocalDate.parse(creditDebt.getPaymentStartDate());
 	    //retornamos el flux 
-	    Flux<CreditDebt> savedDebts = Flux.range(0, creditDebt.getNumberBankPaymentInstallments())
+	    return Flux.range(0, creditDebt.getNumberBankPaymentInstallments())
 	            .flatMap(i -> {
 	            	//nos basamos en registrar las cuotas mensuales
 	            	LocalDate paymentDate = paymentStartDate.plusMonths(i);
@@ -58,8 +59,6 @@ public class CreditDebtServiceImpl implements CreditDebtService{
 	                        .build();
 	                return repository.save(creaditDebtDocument);
             });
-
-	    return savedDebts;
 	}
 
 	//realizar pago de una cuota
@@ -82,7 +81,6 @@ public class CreditDebtServiceImpl implements CreditDebtService{
                 		try {
 							createTransactionCreditPayment(creditdebtDto);
 						} catch (JsonProcessingException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
                         return repository.save(creditDebt);
@@ -101,16 +99,14 @@ public class CreditDebtServiceImpl implements CreditDebtService{
 				.build();
 		String objectToJson = ConvertJson.toJson(dto);
 		WebClient webClient = WebClient.create(bankTransactionkUrl);
+		//preguntar si devuelve info como manejarlo o para que ?
 		webClient.post()
 	        .uri(bankTransactionkUrlCreate)
 	        .contentType(MediaType.APPLICATION_JSON)
 	        .body(BodyInserters.fromValue(objectToJson))
 	        .retrieve()
 	        .bodyToMono(String.class)
-	        .subscribe(response -> {
-	            // Preguntar como manejar una respuesta api
-	            log.info("respuesta obtenida de invocar api: "+response);
-        });        
+	        .subscribe();        
 
 	}
 }
