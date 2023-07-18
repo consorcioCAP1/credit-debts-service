@@ -8,6 +8,7 @@ import reactor.core.publisher.Mono;
 public interface CreditDebtRepository extends ReactiveMongoRepository<CreditDebt, String>{
 
 	 @Query("{'bankFeeNumber': ?0, 'bankAccountNumber': ?1, 'outStandingBankFee': ?2}")
-	 Mono<CreditDebt> findByBankFeeNumberAndBankAccountNumberAndOutStandingBankFee(int bankFeeNumber, String bankAccountNumber, String outStandingBankFee);
+	 Mono<CreditDebt> findByBankFeeNumberAndBankAccountNumberAndOutStandingBankFee(int bankFeeNumber,
+			 	String bankAccountNumber, String outStandingBankFee);
 
 }
