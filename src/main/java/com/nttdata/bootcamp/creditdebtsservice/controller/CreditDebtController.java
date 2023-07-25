@@ -1,5 +1,7 @@
 package com.nttdata.bootcamp.creditdebtsservice.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +39,10 @@ public class CreditDebtController {
             		.status(HttpStatus.BAD_REQUEST).body(error.getMessage());
             return Mono.just(responseEntity);
         });
+    }
+
+    @PostMapping("/findByBankAccountNumberIn")
+    public Flux<CreditDebt> findByBankAccountNumberIn(@RequestBody List<String> bankAccountNumbers){
+    	return creditDebtService.findByBankAccountNumberIn(bankAccountNumbers);
     }
 }

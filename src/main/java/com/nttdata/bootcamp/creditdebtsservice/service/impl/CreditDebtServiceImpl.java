@@ -3,6 +3,7 @@ package com.nttdata.bootcamp.creditdebtsservice.service.impl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -104,7 +105,12 @@ public class CreditDebtServiceImpl implements CreditDebtService{
 	        .body(BodyInserters.fromValue(objectToJson))
 	        .retrieve()
 	        .bodyToMono(String.class)
-	        .subscribe();        
+	        .subscribe();
+	}
 
+	@Override
+	public Flux<CreditDebt> findByBankAccountNumberIn(List<String> bankAccountNumbers){
+		return repository.findByBankAccountNumberInAndOutStandingBankFeeAndPaymentDateBefore(
+				bankAccountNumbers);
 	}
 }
