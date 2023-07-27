@@ -41,8 +41,8 @@ public class CreditDebtController {
         });
     }
 
-    @PostMapping("/findByBankAccountNumberIn")
-    public Flux<CreditDebt> findByBankAccountNumberIn(@RequestBody List<String> bankAccountNumbers){
-    	return creditDebtService.findByBankAccountNumberIn(bankAccountNumbers);
+    @PostMapping("/findDebtsByBankAccountNumberIn")
+    public Mono<Boolean> findDebtsByBankAccountNumberIn(@RequestBody List<String> bankAccountNumbers){
+    	return creditDebtService.findDebtsByBankAccountNumberIn(bankAccountNumbers).hasElements();
     }
 }

@@ -109,7 +109,7 @@ public class CreditDebtServiceImpl implements CreditDebtService{
 	}
 
 	@Override
-	public Flux<CreditDebt> findByBankAccountNumberIn(List<String> bankAccountNumbers){
+	public Flux<CreditDebt> findDebtsByBankAccountNumberIn(List<String> bankAccountNumbers){
 		return repository.findByBankAccountNumberInAndOutStandingBankFeeAndPaymentDateBefore(
 				bankAccountNumbers);
 	}

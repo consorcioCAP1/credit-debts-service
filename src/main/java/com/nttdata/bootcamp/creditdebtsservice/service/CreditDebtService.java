@@ -12,5 +12,5 @@ public interface CreditDebtService {
 
 	public Flux<CreditDebt> saveCreditDebt(CreditdebtDto creditDebt);
 	public Mono<CreditDebt> updateCreditDebt(CreditdebtDto creditdebtDto);
-	public Flux<CreditDebt> findByBankAccountNumberIn(List<String> bankAccountNumbers);
+	public Flux<CreditDebt> findDebtsByBankAccountNumberIn(List<String> bankAccountNumbers);
 }
