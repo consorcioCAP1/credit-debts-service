@@ -31,12 +31,14 @@ public class CreditDebtController {
     @PutMapping("/updateCreditDebt")
     public Mono<ResponseEntity<Object>> updateCreditDebt(@RequestBody CreditdebtDto creditdebtDto) {
         return creditDebtService.updateCreditDebt(creditdebtDto).flatMap(objResponse -> {
-            ResponseEntity<Object> responseEntity = ResponseEntity.ok(objResponse);
+            ResponseEntity<Object> responseEntity = 
+		    			ResponseEntity.ok(objResponse);
             return Mono.just(responseEntity);
         })
         .onErrorResume(error -> {
             ResponseEntity<Object> responseEntity3 = ResponseEntity
-            		.status(HttpStatus.BAD_REQUEST).body(error.getMessage());
+            		.status(HttpStatus.BAD_REQUEST)
+		    .body(error.getMessage());
             return Mono.just(responseEntity3);
         });
     }
