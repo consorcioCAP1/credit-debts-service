@@ -34,11 +34,13 @@ public class CreditDebtController {
     	return creditDebtService.updateCreditDebt(creditdebtDto).flatMap(objResponse -> {
             ResponseEntity<Object> responseEntity2 = ResponseEntity.ok(objResponse);
             return Mono.just(responseEntity2);
+
         })
         .onErrorResume(error -> {
-            ResponseEntity<Object> responseEntity = ResponseEntity
-            		.status(HttpStatus.BAD_REQUEST).body(error.getMessage());
-            return Mono.just(responseEntity);
+            ResponseEntity<Object> responseEntity3 = ResponseEntity
+            		.status(HttpStatus.BAD_REQUEST)
+		    .body(error.getMessage());
+            return Mono.just(responseEntity3);
         });
     	
     }
