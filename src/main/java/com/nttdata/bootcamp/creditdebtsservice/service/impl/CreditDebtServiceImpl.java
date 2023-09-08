@@ -62,7 +62,7 @@ public class CreditDebtServiceImpl implements CreditDebtService{
 	//realizar pago de una cuota
 	@Override
     public Mono<CreditDebt> updateCreditDebt(CreditdebtDto creditdebtDto) {
-        // Buscar el crédito con menor bankFeeNumber que tenga su outStandingBankFee en "YES"
+        // Buscar el crédito con el bankFeeNumber y que tenga su outStandingBankFee en "YES"
         return repository
                 .findByBankFeeNumberAndBankAccountNumberAndOutStandingBankFee(creditdebtDto.getBankFeeNumber(),
                 		creditdebtDto.getBankAccountNumber(),PENDING_PAYMENT_YES)
