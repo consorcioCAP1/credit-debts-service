@@ -59,6 +59,33 @@ public class CreditDebtServiceImpl implements CreditDebtService{
             });
 	}
 
+    public Mono<CreditDebt> copiaDebeEliminarse(CreditdebtDto creditdebtDto) {
+        // Buscar el crédito con el bankFeeNumber y que tenga su outStandingBankFee en "YES"
+        return repository
+                .findByBankFeeNumberAndBankAccountNumberAndOutStandingBankFee(creditdebtDto.getBankFeeNumber(),
+                		creditdebtDto.getBankAccountNumber(),PENDING_PAYMENT_YES)
+                .flatMap(creditDebt -> {
+                    // Actualizar el outStandingBankFee en "NO"
+                	if(creditdebtDto.getPaymentAmount() < creditDebt.getPaymentAmount()) {
+                		return Mono.error(new RuntimeException("Monto insuficiente para cancelar la cuota."));
+                	}
+                	else {
+                		// Establecer el valor de cancelDate con la fecha actual
+                        LocalDateTime currentDate = LocalDateTime.now();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                        creditDebt.setCancelDate(currentDate.format(formatter));
+                		creditDebt.setOutStandingBankFee("NO");
+                		try {
+							createTransactionCreditPayment(creditdebtDto);
+						} catch (JsonProcessingException e) {
+							e.printStackTrace();
+						}
+                        return repository.save(creditDebt);
+                	}
+                })
+                .switchIfEmpty(Mono.error(new RuntimeException("No hay deudas pendientes.")));
+    }	
+	
 	//realizar pago de una cuota
 	@Override
     public Mono<CreditDebt> updateCreditDebt(CreditdebtDto creditdebtDto) {
@@ -69,7 +96,7 @@ public class CreditDebtServiceImpl implements CreditDebtService{
                 .flatMap(creditDebt -> {
                     // Actualizar el outStandingBankFee en "NO"
                 	if(creditdebtDto.getPaymentAmount() < creditDebt.getPaymentAmount()) {
-                		return Mono.error(new RuntimeException("Monto insuficiente para pagar la cuota."));
+                		return Mono.error(new RuntimeException("Monto insuficiente para cancelar la cuota."));
                 	}
                 	else {
                 		// Establecer el valor de cancelDate con la fecha actual
