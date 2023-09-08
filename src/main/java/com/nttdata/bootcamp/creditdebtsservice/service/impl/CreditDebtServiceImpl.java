@@ -135,6 +135,25 @@ public class CreditDebtServiceImpl implements CreditDebtService{
 	        .subscribe();
 	}
 
+	public void eliminar(CreditdebtDto creditDebt) throws JsonProcessingException{
+		BankTransactionDto dto = BankTransactionDto.builder()
+				.amount(creditDebt.getPaymentAmount())
+				.bankAccountNumber(creditDebt.getBankAccountNumber())
+				.type(TRANSACTION_TYPE_BANK_CREDIT_PAYMENT)
+				.description("payment credit")
+				.build();
+		String objectToJson = ConvertJson.toJson(dto);
+		WebClient webClient = WebClient.create(bankTransactionkUrl);
+		//preguntar si devuelve info como manejarlo o para que ?
+		webClient.post()
+	        .uri(bankTransactionkUrlCreate)
+	        .contentType(MediaType.APPLICATION_JSON)
+	        .body(BodyInserters.fromValue(objectToJson))
+	        .retrieve()
+	        .bodyToMono(String.class)
+	        .subscribe();
+	}
+
 	@Override
 	public Flux<CreditDebt> findDebtsByBankAccountNumberIn(List<String> bankAccountNumbers){
 		return repository.findByBankAccountNumberInAndOutStandingBankFeeAndPaymentDateBefore(
