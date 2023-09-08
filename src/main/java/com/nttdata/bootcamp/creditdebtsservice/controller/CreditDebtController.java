@@ -30,10 +30,11 @@ public class CreditDebtController {
 
     @PutMapping("/updateCreditDebt")
     public Mono<ResponseEntity<Object>> updateCreditDebt(@RequestBody CreditdebtDto creditdebtDto) {
-        return creditDebtService.updateCreditDebt(creditdebtDto).flatMap(objResponse -> {
-            ResponseEntity<Object> responseEntity = 
-		    			ResponseEntity.ok(objResponse);
-            return Mono.just(responseEntity);
+    	System.out.println("escribindo este mensaje para practicar cambios");
+    	return creditDebtService.updateCreditDebt(creditdebtDto).flatMap(objResponse -> {
+            ResponseEntity<Object> responseEntity2 = ResponseEntity.ok(objResponse);
+            return Mono.just(responseEntity2);
+
         })
         .onErrorResume(error -> {
             ResponseEntity<Object> responseEntity3 = ResponseEntity
@@ -41,6 +42,7 @@ public class CreditDebtController {
 		    .body(error.getMessage());
             return Mono.just(responseEntity3);
         });
+    	
     }
 
     @PostMapping("/findDebtsByBankAccountNumberIn")
