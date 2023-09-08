@@ -35,9 +35,9 @@ public class CreditDebtController {
             return Mono.just(responseEntity);
         })
         .onErrorResume(error -> {
-            ResponseEntity<Object> responseEntity = ResponseEntity
+            ResponseEntity<Object> responseEntity3 = ResponseEntity
             		.status(HttpStatus.BAD_REQUEST).body(error.getMessage());
-            return Mono.just(responseEntity);
+            return Mono.just(responseEntity3);
         });
     }
 
